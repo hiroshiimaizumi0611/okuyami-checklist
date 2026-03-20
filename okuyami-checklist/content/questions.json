@@ -1,0 +1,155 @@
+[
+  {
+    "id": "relationship_to_deceased",
+    "text": "亡くなった方との関係",
+    "answer_type": "single_choice",
+    "options": [
+      { "value": "spouse", "label": "配偶者" },
+      { "value": "child", "label": "子" },
+      { "value": "parent", "label": "親" },
+      { "value": "sibling", "label": "兄弟姉妹" },
+      { "value": "other", "label": "その他" }
+    ],
+    "order": 1,
+    "help_text": "手続きの優先度や確認すべき窓口の目安に使います。"
+  },
+  {
+    "id": "date_of_death",
+    "text": "亡くなったのはいつか",
+    "answer_type": "date",
+    "options": [],
+    "order": 2,
+    "help_text": "期限判定の基準日になります。"
+  },
+  {
+    "id": "last_resident_municipality",
+    "text": "最後に住んでいた自治体",
+    "answer_type": "text",
+    "options": [],
+    "order": 3,
+    "help_text": "役所手続きの窓口確認に使います。"
+  },
+  {
+    "id": "has_other_heirs",
+    "text": "あなた以外の相続人がいるか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "いる" },
+      { "value": "false", "label": "いない/不明" }
+    ],
+    "order": 4,
+    "help_text": "遺産分割や合意形成の難易度判定に使います。"
+  },
+  {
+    "id": "has_real_estate",
+    "text": "不動産があるか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "ある" },
+      { "value": "false", "label": "ない/不明" }
+    ],
+    "order": 5,
+    "help_text": "名義変更や登記関連手続きの有無を判定します。"
+  },
+  {
+    "id": "has_vehicle",
+    "text": "自動車があるか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "ある" },
+      { "value": "false", "label": "ない/不明" }
+    ],
+    "order": 6,
+    "help_text": "移転登録や抹消登録の確認に使います。"
+  },
+  {
+    "id": "has_debt_risk",
+    "text": "借金や保証債務の不安があるか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "ある" },
+      { "value": "false", "label": "ない/不明" }
+    ],
+    "order": 7,
+    "help_text": "相続放棄の期限注意や専門家相談導線に使います。"
+  },
+  {
+    "id": "was_pension_recipient",
+    "text": "年金を受給していたか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "はい" },
+      { "value": "false", "label": "いいえ/不明" }
+    ],
+    "order": 8,
+    "help_text": "年金停止や未支給年金請求の候補判定に使います。"
+  },
+  {
+    "id": "health_insurance_type",
+    "text": "健康保険の種類は何か",
+    "answer_type": "single_choice",
+    "options": [
+      { "value": "national", "label": "国民健康保険" },
+      { "value": "employee", "label": "被用者保険（協会けんぽ/組合健保）" },
+      { "value": "late-elderly", "label": "後期高齢者医療制度" },
+      { "value": "unknown", "label": "不明" }
+    ],
+    "order": 9,
+    "help_text": "保険資格喪失や返却物の確認に使います。"
+  },
+  {
+    "id": "has_life_insurance",
+    "text": "生命保険に加入していたか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "はい" },
+      { "value": "false", "label": "いいえ/不明" }
+    ],
+    "order": 10,
+    "help_text": "保険金請求の候補表示に使います。"
+  },
+  {
+    "id": "was_company_employee_or_public_servant",
+    "text": "会社員または公務員として働いていたか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "はい" },
+      { "value": "false", "label": "いいえ/不明" }
+    ],
+    "order": 11,
+    "help_text": "勤務先経由の手続き候補を表示するために使います。"
+  },
+  {
+    "id": "needs_household_head_change",
+    "text": "世帯主変更が必要そうか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "必要そう" },
+      { "value": "false", "label": "不要/不明" }
+    ],
+    "order": 12,
+    "help_text": "住民票関連の確認手続きを候補表示します。"
+  },
+  {
+    "id": "needs_bank_or_card_cleanup",
+    "text": "銀行口座やクレジットカードの整理が必要か",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "必要" },
+      { "value": "false", "label": "不要/不明" }
+    ],
+    "order": 13,
+    "help_text": "資産整理や契約解約に関する候補表示に使います。"
+  },
+  {
+    "id": "has_family_dispute_risk",
+    "text": "家族間でもめる可能性があるか",
+    "answer_type": "boolean",
+    "options": [
+      { "value": "true", "label": "ある" },
+      { "value": "false", "label": "ない/不明" }
+    ],
+    "order": 14,
+    "help_text": "一般案内のみで不足する可能性を判定し、相談導線を強化します。"
+  }
+]

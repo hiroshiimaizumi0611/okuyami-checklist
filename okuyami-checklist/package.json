@@ -1,0 +1,36 @@
+{
+  "name": "okuyami-checklist",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:articles": "node scripts/generate-article-markdown-module.mjs",
+    "dev": "wrangler dev",
+    "predev": "npm run generate:articles",
+    "test": "vitest run",
+    "pretest": "npm run generate:articles",
+    "test:e2e": "playwright test",
+    "pretest:e2e": "npm run generate:articles",
+    "typecheck": "tsc --noEmit",
+    "pretypecheck": "npm run generate:articles",
+    "deploy": "wrangler deploy",
+    "predeploy": "npm run generate:articles"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-jp": "^5.2.9",
+    "@pdf-lib/fontkit": "^1.1.1",
+    "hono": "^4.6.17",
+    "marked": "^15.0.7",
+    "pdf-lib": "^1.17.1",
+    "resend": "^4.1.2",
+    "stripe": "^17.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.71",
+    "@cloudflare/workers-types": "^4.20260317.1",
+    "@playwright/test": "^1.49.1",
+    "miniflare": "^3.20241230.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.76.0"
+  }
+}

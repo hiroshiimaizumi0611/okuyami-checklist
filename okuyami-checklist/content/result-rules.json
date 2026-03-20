@@ -1,0 +1,130 @@
+[
+  {
+    "id": "rule-death-notification-default",
+    "condition_expression": "always",
+    "procedure_id": "death-notification",
+    "priority": 100,
+    "visibility_reason": "亡くなり直後の基本手続きとして必ず確認が必要なため。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-pension-recipient",
+    "condition_expression": "was_pension_recipient == true",
+    "procedure_id": "national-pension-loss-report",
+    "priority": 95,
+    "visibility_reason": "年金受給ありのため、受給停止と未支給年金確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-employee-benefits",
+    "condition_expression": "was_company_employee_or_public_servant == true",
+    "procedure_id": "employee-benefits-contact",
+    "priority": 80,
+    "visibility_reason": "勤務先経由の手続きが必要になる可能性があるため。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-health-insurance-national",
+    "condition_expression": "health_insurance_type == \"national\"",
+    "procedure_id": "health-insurance-status-update",
+    "priority": 85,
+    "visibility_reason": "健康保険種別に応じて資格喪失確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-health-insurance-employee",
+    "condition_expression": "health_insurance_type == \"employee\"",
+    "procedure_id": "health-insurance-status-update",
+    "priority": 85,
+    "visibility_reason": "健康保険種別に応じて資格喪失確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-health-insurance-late-elderly",
+    "condition_expression": "health_insurance_type == \"late-elderly\"",
+    "procedure_id": "health-insurance-status-update",
+    "priority": 85,
+    "visibility_reason": "健康保険種別に応じて資格喪失確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-household-head-change",
+    "condition_expression": "needs_household_head_change == true",
+    "procedure_id": "household-head-change",
+    "priority": 75,
+    "visibility_reason": "世帯主変更が必要な可能性があるため。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-bank-cleanup",
+    "condition_expression": "needs_bank_or_card_cleanup == true",
+    "procedure_id": "bank-account-inheritance-contact",
+    "priority": 70,
+    "visibility_reason": "銀行口座整理が必要なため、金融機関手続きを確認します。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-card-cleanup",
+    "condition_expression": "needs_bank_or_card_cleanup == true",
+    "procedure_id": "credit-card-cancellation",
+    "priority": 68,
+    "visibility_reason": "カードや継続課金の停止漏れを防ぐ必要があるため。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-life-insurance",
+    "condition_expression": "has_life_insurance == true",
+    "procedure_id": "life-insurance-claim",
+    "priority": 65,
+    "visibility_reason": "生命保険契約があるため、請求期限の確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-inheritance-renunciation",
+    "condition_expression": "has_debt_risk == true",
+    "procedure_id": "inheritance-renunciation-review",
+    "priority": 99,
+    "visibility_reason": "借金・保証債務の不安があるため、3か月以内の法的期限確認が重要です。",
+    "escalation_flag": "expert-consultation"
+  },
+  {
+    "id": "rule-inheritance-tax-default",
+    "condition_expression": "always",
+    "procedure_id": "inheritance-tax-review",
+    "priority": 40,
+    "visibility_reason": "相続税申告の要否を早めに把握しておく必要があるため。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-real-estate",
+    "condition_expression": "has_real_estate == true",
+    "procedure_id": "real-estate-title-change",
+    "priority": 78,
+    "visibility_reason": "不動産があるため、相続登記の確認が必要です。",
+    "escalation_flag": "expert-consultation"
+  },
+  {
+    "id": "rule-vehicle",
+    "condition_expression": "has_vehicle == true",
+    "procedure_id": "vehicle-title-change",
+    "priority": 66,
+    "visibility_reason": "自動車があるため、名義変更または抹消の確認が必要です。",
+    "escalation_flag": ""
+  },
+  {
+    "id": "rule-many-heirs",
+    "condition_expression": "has_other_heirs == true",
+    "procedure_id": "inheritance-dispute-consultation",
+    "priority": 62,
+    "visibility_reason": "相続人が複数いる場合、一般案内だけでは不足することがあるため。",
+    "escalation_flag": "expert-consultation"
+  },
+  {
+    "id": "rule-dispute-risk",
+    "condition_expression": "has_family_dispute_risk == true",
+    "procedure_id": "inheritance-dispute-consultation",
+    "priority": 98,
+    "visibility_reason": "家族間トラブルの可能性があるため、早期相談導線を確保します。",
+    "escalation_flag": "expert-consultation"
+  }
+]
