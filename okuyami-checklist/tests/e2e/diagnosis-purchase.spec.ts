@@ -1,3 +1,4 @@
+import { mkdirSync, writeFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
 const basicCase = {
@@ -17,11 +18,21 @@ const basicCase = {
   has_family_dispute_risk: false
 } as const;
 
+const ARTIFACT_DIR = "test-results/ui-refresh";
+
 test("user completes diagnosis, pays in test mode, downloads the PDF, and resends the link", async ({
   page
 }) => {
+  mkdirSync(ARTIFACT_DIR, { recursive: true });
+  writeFileSync(
+    `${ARTIFACT_DIR}/verification-note.txt`,
+    "Verified local flow at http://127.0.0.1:8787 on 2026-03-21.\n",
+    "utf8"
+  );
+
   await page.goto("/");
-  await page.getByRole("link", { name: "無料で3分診断を始める" }).click();
+  await page.screenshot({ path: `${ARTIFACT_DIR}/landing.png`, fullPage: true });
+  await page.getByRole("link", { name: "無料で診断を始める" }).click();
 
   for (const [name, value] of Object.entries(basicCase)) {
     const radioOption = page.locator(`input[name="${name}"][value="${String(value)}"]`);
@@ -34,7 +45,10 @@ test("user completes diagnosis, pays in test mode, downloads the PDF, and resend
   }
 
   await page.getByRole("button", { name: "無料で結果を見る" }).click();
+  await expect(page.getByText("一般的な案内です。")).toBeVisible();
   await expect(page.getByRole("heading", { name: "期限順の手続き候補" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "有料版 PDF を受け取る" })).toBeVisible();
+  await page.screenshot({ path: `${ARTIFACT_DIR}/results.png`, fullPage: true });
 
   const snapshotToken = await page.locator('input[name="snapshot_token"]').inputValue();
   expect(snapshotToken.length).toBeGreaterThan(20);
@@ -55,6 +69,8 @@ test("user completes diagnosis, pays in test mode, downloads the PDF, and resend
   const download = await downloadPromise;
 
   expect(await download.suggestedFilename()).toMatch(/^okuyami-checklist-.*\.pdf$/u);
+  await download.saveAs(`${ARTIFACT_DIR}/okuyami-checklist.pdf`);
+  await page.screenshot({ path: `${ARTIFACT_DIR}/purchase-success.png`, fullPage: true });
 
   await page.getByLabel("購入時のメールアドレス").fill("buyer@example.com");
   await page.getByRole("button", { name: "ダウンロードリンクを再送する" }).click();

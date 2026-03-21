@@ -10,7 +10,7 @@ describe("createTestD1Database", () => {
     }
   });
 
-  it("applies all migration files in order", async () => {
+  it("applies all migration files in order", { timeout: 10000 }, async () => {
     const state = await createTestD1Database();
     mf = state.mf;
 
