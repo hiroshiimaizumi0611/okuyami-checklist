@@ -12,47 +12,68 @@ interface DiagnosisFormProps {
 }
 
 const diagnosisFormStyles = `
-  .diagnosis-panel {
-    display: grid;
-    gap: 20px;
-    padding: 20px;
-    border: 1px solid var(--line);
-    background: var(--surface);
+  .diagnosis-page {
+    padding: 36px 20px 88px;
   }
 
-  .diagnosis-eyebrow {
-    margin: 0;
-    font-size: 11px;
-    font-weight: 600;
+  .diagnosis-shell {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .diagnosis-intro {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .diagnosis-rule {
     color: var(--text-subtle);
-    letter-spacing: 0.16em;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
   }
 
   .diagnosis-title {
-    margin: 12px 0 0;
-    max-width: 12em;
-    font-size: 32px;
-    line-height: 1.2;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(34px, 5.2vw, 56px);
+    line-height: 1.14;
+    letter-spacing: -0.05em;
   }
 
   .diagnosis-lead {
-    margin: 14px 0 0;
+    margin: 0;
     max-width: 42rem;
     color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.9;
+  }
+
+  .diagnosis-progress {
+    margin: 0;
+    color: var(--text-subtle);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
   }
 
   .diagnosis-alert {
-    padding: 16px 18px;
-    border: 1px solid var(--line-strong);
-    background: var(--surface-muted);
+    margin: 0 0 24px;
+    padding: 18px 20px;
+    border: 1px solid var(--accent);
+    background: rgba(241, 224, 205, 0.3);
   }
 
   .diagnosis-alert-title {
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1.3;
   }
 
   .diagnosis-alert-copy {
@@ -66,184 +87,183 @@ const diagnosisFormStyles = `
     padding-left: 18px;
     color: var(--text-muted);
     font-size: 14px;
-  }
-
-  .diagnosis-progress {
-    margin: 0;
-    padding-top: 2px;
-    color: var(--text-muted);
-    font-size: 14px;
+    line-height: 1.8;
   }
 
   .diagnosis-form {
     display: grid;
-    gap: 14px;
+    gap: 18px;
   }
 
   .question-card {
     margin: 0;
-    padding: 16px;
-    border: 1px solid var(--line);
+    padding: 28px 24px;
+    border: 1px solid rgba(214, 205, 194, 0.6);
     background: var(--surface);
   }
 
   .question-card--invalid {
-    border-color: var(--line-strong);
+    border-color: var(--accent);
   }
 
   .question-card legend {
     width: 100%;
-    margin: 0;
     padding: 0;
   }
 
+  .question-inner {
+    display: grid;
+    gap: 18px;
+  }
+
   .question-label {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: grid;
+    gap: 12px;
   }
 
   .question-index {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-subtle);
-    letter-spacing: 0.14em;
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 0.9;
+    letter-spacing: -0.08em;
+    color: rgba(141, 116, 83, 0.45);
   }
 
   .question-text {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.45;
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1.34;
+    letter-spacing: -0.04em;
   }
 
   .question-help {
-    margin: 10px 0 0;
+    margin: 0;
     color: var(--text-muted);
     font-size: 13px;
-    line-height: 1.7;
+    line-height: 1.9;
+  }
+
+  .question-control {
+    display: grid;
+    gap: 10px;
   }
 
   .question-error {
-    margin: 10px 0 0;
-    color: var(--text);
+    margin: 0;
+    color: var(--accent-strong);
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
   .option-list {
     display: grid;
     gap: 8px;
-    margin-top: 14px;
   }
 
   .option-item {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 14px 16px;
-    border: 1px solid var(--line);
+    align-items: center;
+    gap: 14px;
+    min-height: 60px;
+    padding: 0 18px;
+    border: 1px solid transparent;
     background: var(--surface-muted);
     cursor: pointer;
     transition:
-      border-color 140ms ease,
-      background-color 140ms ease;
+      border-color 160ms ease,
+      background-color 160ms ease;
   }
 
-  .option-item:hover {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-
+  .option-item:hover,
   .option-item:focus-within {
-    border-color: var(--accent);
+    border-color: rgba(141, 116, 83, 0.35);
     background: var(--surface);
   }
 
   .option-item input {
-    margin: 2px 0 0;
     accent-color: var(--accent);
-    inline-size: 16px;
-    block-size: 16px;
+    inline-size: 18px;
+    block-size: 18px;
     flex: none;
+    margin: 0;
   }
 
-  .option-item input[aria-invalid="true"] + span,
-  .option-item--invalid span {
+  .option-item span {
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text);
   }
 
   .text-input {
     width: 100%;
-    min-height: 48px;
-    margin-top: 14px;
-    padding: 11px 14px;
-    border: 1px solid var(--line);
-    background: var(--surface-muted);
+    min-height: 58px;
+    padding: 0;
+    border: 0;
+    border-bottom: 2px solid rgba(214, 205, 194, 0.8);
+    background: transparent;
     color: var(--text);
-    font-size: 16px;
+    font-size: 18px;
+    transition: border-color 160ms ease;
   }
 
-  .text-input:hover {
-    border-color: var(--accent);
-  }
-
+  .text-input:hover,
   .text-input:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
     border-color: var(--accent);
-    background: var(--surface);
+    outline: none;
   }
 
   .text-input[aria-invalid="true"] {
-    border-color: var(--line-strong);
-  }
-
-  .text-input:disabled,
-  .option-item input:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
+    border-color: var(--accent);
   }
 
   .diagnosis-disclaimer {
-    margin: 2px 0 0;
+    margin: 8px 0 0;
     color: var(--text-muted);
     font-size: 13px;
-    line-height: 1.8;
+    line-height: 1.9;
+  }
+
+  .diagnosis-disclaimer strong {
+    color: var(--text);
+    font-weight: 700;
   }
 
   .diagnosis-submit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 18px;
-    border: 1px solid var(--accent);
+    justify-self: start;
+    min-height: 62px;
+    padding: 0 28px;
+    border: 0;
     background: var(--accent);
     color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    line-height: 1.2;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     cursor: pointer;
+    transition: background-color 160ms ease;
   }
 
   .diagnosis-submit:hover,
   .diagnosis-submit:focus-visible {
     background: var(--accent-strong);
-    border-color: var(--accent-strong);
   }
 
-  @media (min-width: 768px) {
-    .diagnosis-panel {
-      gap: 24px;
-      padding: 32px;
-    }
-
-    .diagnosis-title {
-      font-size: 42px;
+  @media (min-width: 900px) {
+    .diagnosis-page {
+      padding-left: 32px;
+      padding-right: 32px;
     }
 
     .question-card {
-      padding: 18px 20px;
+      padding: 30px 34px;
+    }
+
+    .question-inner {
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
     }
   }
 `;
@@ -255,66 +275,68 @@ export const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const errorsByField = new Map(submissionErrors.map((error) => [error.field, error.message]));
 
   return (
-    <section class="diagnosis-panel">
+    <section class="diagnosis-page">
       <style>{diagnosisFormStyles}</style>
-      <div>
-        <p class="diagnosis-eyebrow">FREE DIAGNOSIS</p>
-        <h1 class="diagnosis-title">状況に沿って、今確認したい手続きを整理する</h1>
-        <p class="diagnosis-lead">
-          {questions.length}問の短い質問に答えると、一般案内として期限順の手続き候補と公式確認先を整理できます。
-        </p>
-      </div>
-
-      {submissionErrors.length > 0 ? (
-        <section class="diagnosis-alert" role="alert" aria-live="polite">
-          <p class="diagnosis-alert-title">入力内容を確認してください</p>
-          <p class="diagnosis-alert-copy">
-            未入力または形式が合わない項目があります。下の質問を見直してから、もう一度結果を表示してください。
+      <div class="diagnosis-shell">
+        <div class="diagnosis-intro">
+          <p class="diagnosis-rule">Diagnosis form</p>
+          <h1 class="diagnosis-title">必要な手続きを診断します</h1>
+          <p class="diagnosis-lead">
+            亡くなった方との関係や資産状況などを順番に確認し、一般案内として、公式確認先と専門家相談が必要になりそうな項目まで整理します。
           </p>
-          <ul class="diagnosis-alert-list">
-            {submissionErrors.map((error) => (
-              <li key={error.field}>
-                <strong>{error.field}</strong>: {error.message}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+          <p class="diagnosis-progress">{questions.length}問の質問</p>
+        </div>
 
-      <p class="diagnosis-progress">{questions.length}問中、上から順に確認してください。</p>
+        {submissionErrors.length > 0 ? (
+          <section class="diagnosis-alert" role="alert" aria-live="polite">
+            <p class="diagnosis-alert-title">入力内容を確認してください</p>
+            <p class="diagnosis-alert-copy">
+              未入力または形式が合わない項目があります。該当箇所を見直してから、もう一度結果を表示してください。
+            </p>
+            <ul class="diagnosis-alert-list">
+              {submissionErrors.map((error) => (
+                <li key={error.field}>
+                  <strong>{error.field}</strong>: {error.message}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
-      <form class="diagnosis-form" method="post" action="/results">
-        {questions.map((question, index) => {
-          const errorMessage = errorsByField.get(question.id);
-          const hasError = typeof errorMessage === "string";
+        <form class="diagnosis-form" method="post" action="/results">
+          {questions.map((question, index) => {
+            const errorMessage = errorsByField.get(question.id);
+            const hasError = typeof errorMessage === "string";
 
-          return (
-            <fieldset
-              class={`question-card${hasError ? " question-card--invalid" : ""}`}
-              key={question.id}
-            >
-              <legend>
-                <span class="question-label">
-                  <span class="question-index">
-                    Q{index + 1} / {questions.length}
-                  </span>
-                  <span class="question-text">{question.text}</span>
-                </span>
-              </legend>
-              <p class="question-help">{question.help_text}</p>
-              {renderInput(question, hasError)}
-              {hasError ? <p class="question-error">{errorMessage}</p> : null}
-            </fieldset>
-          );
-        })}
+            return (
+              <fieldset
+                class={hasError ? "question-card question-card--invalid" : "question-card"}
+                key={question.id}
+              >
+                <legend>
+                  <div class="question-inner">
+                    <span class="question-index">{String(index + 1).padStart(2, "0")}</span>
+                    <span class="question-label">
+                      <span class="question-text">{question.text}</span>
+                      <span class="question-help">{question.help_text}</span>
+                    </span>
+                  </div>
+                </legend>
+                <div class="question-control">{renderInput(question, hasError)}</div>
+                {hasError ? <p class="question-error">{errorMessage}</p> : null}
+              </fieldset>
+            );
+          })}
 
-        <p class="diagnosis-disclaimer">
-          診断結果は一般案内です。表示後は公式確認先を確認し、判断に迷う場合は専門家へ相談してください。
-        </p>
-        <button class="diagnosis-submit" type="submit">
-          無料で結果を見る
-        </button>
-      </form>
+          <p class="diagnosis-disclaimer">
+            <strong>一般案内です。</strong>
+            この診断は法律判断や税務判断を行うものではありません。結果では公式確認先を併記し、迷う場合は専門家への相談を促します。
+          </p>
+          <button class="diagnosis-submit" type="submit">
+            無料で結果を見る
+          </button>
+        </form>
+      </div>
     </section>
   );
 };
@@ -353,11 +375,7 @@ function renderInput(question: DiagnosisQuestion, hasError: boolean) {
       {question.options.map((option) => {
         const optionId = `${question.id}-${option.value}`;
         return (
-          <label
-            class={`option-item${hasError ? " option-item--invalid" : ""}`}
-            htmlFor={optionId}
-            key={optionId}
-          >
+          <label class="option-item" htmlFor={optionId} key={optionId}>
             <input
               id={optionId}
               name={question.id}

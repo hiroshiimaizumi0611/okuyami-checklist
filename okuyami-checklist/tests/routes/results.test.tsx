@@ -48,9 +48,10 @@ describe("POST /results", () => {
     expect(html).toContain("3か月以内に要注意のこと");
     expect(html).toContain("10か月以内に確認すること");
     expect(html).toContain("期限の確認が必要なこと");
+    expect(html).toContain("診断結果: あなたに必要な手続き");
     expect(html).toContain("一般的な案内です。");
     expect(html).toContain("公式確認先");
-    expect(html).toContain("有料版 PDF を受け取る");
+    expect(html).toContain("個別ガイドPDFを受け取る");
     expect(html).toContain('name="snapshot_token"');
     expect(events[0]?.eventName).toBe("diagnosis_completed");
     expect(events[0]?.payload).toMatchObject({
@@ -112,7 +113,7 @@ describe("POST /results", () => {
 
     expect(res.status).toBe(400);
     expect(html).toContain("入力内容を確認してください");
-    expect(html).toContain("14問中");
+    expect(html).toContain("必要な手続きを診断します");
     expect(html).toContain('class="question-card"');
     expect(html).toContain("一般案内です。");
     expect(html).toContain("health_insurance_type");

@@ -35,8 +35,8 @@ describe("GET /diagnosis", () => {
     const events = await createD1EventRepository(db).listRecent();
 
     expect(res.status).toBe(200);
-    expect(html).toContain(`${orderedQuestions.length}問中`);
-    expect(html).not.toContain(`進捗表示: 全${orderedQuestions.length}問`);
+    expect(html).toContain("必要な手続きを診断します");
+    expect(html).toContain(`${orderedQuestions.length}問の質問`);
     expect(html).toContain('method="post" action="/results"');
     expect(html).toContain("一般案内です。");
     expect(html).toContain("公式確認先");

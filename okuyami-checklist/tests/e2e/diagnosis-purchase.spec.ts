@@ -46,8 +46,8 @@ test("user completes diagnosis, pays in test mode, downloads the PDF, and resend
 
   await page.getByRole("button", { name: "無料で結果を見る" }).click();
   await expect(page.getByText("一般的な案内です。")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "期限順の手続き候補" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "有料版 PDF を受け取る" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "診断結果: あなたに必要な手続き" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "個別ガイドPDFを受け取る" })).toBeVisible();
   await page.screenshot({ path: `${ARTIFACT_DIR}/results.png`, fullPage: true });
 
   const snapshotToken = await page.locator('input[name="snapshot_token"]').inputValue();
@@ -59,7 +59,7 @@ test("user completes diagnosis, pays in test mode, downloads the PDF, and resend
   await expect(page.getByRole("heading", { name: "テスト決済を完了する" })).toBeVisible();
   await page.getByRole("button", { name: "テスト決済を完了する" }).click();
 
-  await expect(page.getByRole("heading", { name: "お支払いを確認しました" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "ご購入手続きが完了いたしました" })).toBeVisible();
 
   const downloadLink = page.getByRole("link", { name: "有料版のダウンロード" });
   await expect(downloadLink).toHaveAttribute("href", /\/download\?token=/u);

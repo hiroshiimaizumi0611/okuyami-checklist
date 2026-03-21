@@ -27,8 +27,8 @@ export interface ChecklistPdfModel {
   escalationFlags: string[];
 }
 
-const PDF_LABEL = "CHECKLIST";
-const PDF_TITLE = "おくやみ手続きナビ 有料版チェックリスト";
+const PDF_LABEL = "OFFICIAL DOCUMENT";
+const PDF_TITLE = "おくやみ手続き 完了チェックリスト";
 const PDF_TRUST_NOTICE = "一般案内です。実際に進める前に公式情報を確認してください。";
 const MEMO_LINE_COUNT = 4;
 

@@ -57,7 +57,8 @@ describe("checklist PDF", () => {
     const model = buildChecklistPdfModel(sampleSnapshot);
 
     expect(model).toMatchObject({
-      title: "おくやみ手続きナビ 有料版チェックリスト",
+      documentLabel: "OFFICIAL DOCUMENT",
+      title: "おくやみ手続き 完了チェックリスト",
       generatedAtLabel: "作成日: 2026-03-20",
       trustNotice: "一般案内です。実際に進める前に公式情報を確認してください。",
       sections: [
@@ -101,8 +102,8 @@ describe("checklist PDF", () => {
 
     const drawnStrings = drawTextSpy.mock.calls.map(([text]) => text);
 
-    expect(drawnStrings).toContain("おくやみ手続きナビ 有料版チェックリスト");
-    expect(drawnStrings).toContain("CHECKLIST");
+    expect(drawnStrings).toContain("おくやみ手続き 完了チェックリスト");
+    expect(drawnStrings).toContain("OFFICIAL DOCUMENT");
     expect(drawnStrings).toContain("まず2週間以内に確認したい手続き");
     expect(drawnStrings).toContain("一般案内");
     expect(drawnStrings).toContain("公式情報");

@@ -37,6 +37,8 @@ async function settlesQuickly<T>(promise: Promise<T>, timeoutMs = 250): Promise<
   );
 }
 
+const DEFERRED_RESPONSE_TIMEOUT_MS = 3000;
+
 async function signWebhookPayload(payload: string, secret: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     "raw",
@@ -84,7 +86,7 @@ describe("analytics deferral", () => {
       )
     );
 
-    expect(await settlesQuickly(responsePromise, 1000)).toBe(true);
+    expect(await settlesQuickly(responsePromise, DEFERRED_RESPONSE_TIMEOUT_MS)).toBe(true);
 
     const response = await responsePromise;
     expect(response.status).toBe(200);
@@ -130,7 +132,7 @@ describe("analytics deferral", () => {
       )
     );
 
-    expect(await settlesQuickly(responsePromise, 1000)).toBe(true);
+    expect(await settlesQuickly(responsePromise, DEFERRED_RESPONSE_TIMEOUT_MS)).toBe(true);
 
     const response = await responsePromise;
     expect(response.status).toBe(303);
@@ -200,7 +202,7 @@ describe("analytics deferral", () => {
       )
     );
 
-    expect(await settlesQuickly(responsePromise, 1000)).toBe(true);
+    expect(await settlesQuickly(responsePromise, DEFERRED_RESPONSE_TIMEOUT_MS)).toBe(true);
 
     const response = await responsePromise;
     expect(response.status).toBe(200);

@@ -54,7 +54,7 @@ describe("GET /purchase/success", () => {
     const pendingHtml = await pendingRes.text();
 
     expect(pendingRes.status).toBe(200);
-    expect(pendingHtml).toContain("確認中");
+    expect(pendingHtml).toContain("決済情報を確認しています");
     expect(pendingHtml).not.toContain("ダウンロードリンクを再送する");
     expect(pendingHtml).not.toContain("download?token=");
 
@@ -83,6 +83,7 @@ describe("GET /purchase/success", () => {
     const token = paidHtml.match(/href="\/download\?token=([^"]+)"/u)?.[1];
 
     expect(paidRes.status).toBe(200);
+    expect(paidHtml).toContain("ご購入手続きが完了いたしました");
     expect(paidHtml).toContain("有料版のダウンロード");
     expect(paidHtml).toContain("購入時のメールアドレス");
     expect(token).toBeDefined();
@@ -120,7 +121,7 @@ describe("GET /purchase/success", () => {
     const html = await res.text();
 
     expect(res.status).toBe(200);
-    expect(html).toContain("TEST MODE");
+    expect(html).toContain("テスト決済");
     expect(html).toContain("テスト決済を完了する");
   });
 });
