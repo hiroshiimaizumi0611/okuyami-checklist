@@ -28,16 +28,16 @@ describe("GET /", () => {
     const events = await createD1EventRepository(db).listRecent();
 
     expect(res.status).toBe(200);
-    expect(html).toContain("3分で必要な手続きを整理");
+    expect(html).toContain("何を先に確認すべきかを");
     expect(html).toContain("--bg: #F5F5F2");
     expect(html).toContain("--accent: #5B665F");
     expect(html).toContain("&quot;Noto Sans JP&quot;, &quot;Hiragino Sans&quot;, &quot;Yu Gothic&quot;, sans-serif");
     expect(html).not.toContain("--paper:");
     expect(html).not.toContain("--signal:");
-    expect(html).toContain("本サービスは一般的な制度情報に基づく案内です。");
+    expect(html).toContain("一般案内");
+    expect(html).toContain("個別事情の法的判断・税務判断・相続判断");
     expect(html).toContain('href="/diagnosis"');
-    expect(html).toContain("結果ページは次のステップで対応予定です。");
-    expect(html).not.toContain("まずは無料で結果を確認できます");
+    expect(html).not.toContain("結果ページは次のステップで対応予定です。");
     expect(events[0]?.eventName).toBe("landing_view");
   });
 });

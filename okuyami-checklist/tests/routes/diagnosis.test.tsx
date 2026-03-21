@@ -35,12 +35,12 @@ describe("GET /diagnosis", () => {
     const events = await createD1EventRepository(db).listRecent();
 
     expect(res.status).toBe(200);
-    expect(html).toContain(`進捗表示: 全${orderedQuestions.length}問`);
-    expect(html).toContain(`${orderedQuestions.length}問の短い質問に答えると`);
+    expect(html).toContain(`${orderedQuestions.length}問中`);
+    expect(html).not.toContain(`進捗表示: 全${orderedQuestions.length}問`);
     expect(html).toContain('method="post" action="/results"');
-    expect(html).toContain(
-      "診断結果は一般案内です。表示後は公式確認先を必ず確認し、必要に応じて専門家へ相談してください。"
-    );
+    expect(html).toContain("一般案内です。");
+    expect(html).toContain("公式確認先");
+    expect(html).toContain("専門家");
 
     orderedQuestions.forEach((question) => {
       expect(html).toContain(question.text);

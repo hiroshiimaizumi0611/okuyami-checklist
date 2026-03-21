@@ -110,6 +110,9 @@ describe("POST /results", () => {
 
     expect(res.status).toBe(400);
     expect(html).toContain("入力内容を確認してください");
+    expect(html).toContain("14問中");
+    expect(html).toContain('class="question-card"');
+    expect(html).toContain("一般案内です。");
     expect(html).toContain("health_insurance_type");
   });
 

@@ -17,7 +17,7 @@ export async function renderDiagnosisForm(c: Context) {
   return c.html(
     <Layout
       title="おくやみ手続きナビ | 診断フォーム"
-      description="亡くなった方との関係や資産状況など14問に回答し、無料結果ページで手続き候補を整理します。"
+      description="亡くなった方との関係や資産状況など14問に回答し、一般案内として期限順の手続き候補と公式確認先を整理します。"
     >
       <DiagnosisForm questions={sortedQuestions} />
     </Layout>

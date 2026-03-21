@@ -8,6 +8,7 @@ import {
   trackAnalyticsInBackground
 } from "../../lib/analytics";
 import { signSnapshotToken } from "../../lib/snapshot-token";
+import { DiagnosisForm } from "../../ui/components/diagnosis-form";
 import { ResultSummary } from "../../ui/components/result-summary";
 import { Layout } from "../../ui/layout";
 
@@ -26,25 +27,13 @@ export async function submitResults(c: Context) {
   const parsed = parseDiagnosisSubmission(formData, questions);
 
   if (!parsed.ok) {
+    const sortedQuestions = [...questions].sort((a, b) => a.order - b.order);
     return c.html(
       <Layout
         title="おくやみ手続きナビ | 入力内容の確認"
         description="入力内容に不足または形式不備があります。"
       >
-        <section>
-          <h1>入力内容を確認してください</h1>
-          <p>未入力または形式不正の項目があります。診断フォームに戻って修正してください。</p>
-          <ul>
-            {parsed.errors.map((error) => (
-              <li key={error.field}>
-                <strong>{error.field}</strong>: {error.message}
-              </li>
-            ))}
-          </ul>
-          <p>
-            <a href="/diagnosis">診断フォームへ戻る</a>
-          </p>
-        </section>
+        <DiagnosisForm questions={sortedQuestions} submissionErrors={parsed.errors} />
       </Layout>,
       400
     );

@@ -14,7 +14,7 @@ export async function renderLandingPage(c: Context) {
   return c.html(
     <Layout
       title="おくやみ手続きナビ | 無料3分診断"
-      description="必要な手続きを短時間で整理する、一般案内の無料診断ページです。"
+      description="ご家族が亡くなったあとに何を先に確認すべきかを静かに整理する、一般案内の無料診断ページです。"
     >
       <Hero />
     </Layout>
