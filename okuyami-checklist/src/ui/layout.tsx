@@ -8,31 +8,59 @@ interface LayoutProps extends PropsWithChildren {
 const baseStyles = `
   :root {
     color-scheme: light;
-    --paper: #f8f4ea;
-    --paper-strong: #efe5d2;
-    --paper-soft: #fffdf8;
-    --ink: #242018;
-    --ink-soft: #5e5543;
-    --line: #d8ccb7;
-    --signal: #355f56;
-    --signal-strong: #264f47;
+    --bg: #F5F5F2;
+    --surface: #FFFFFF;
+    --surface-muted: #FAFAF7;
+    --text: #111111;
+    --text-muted: #666666;
+    --text-subtle: #8A8A8A;
+    --line: #DCDCD7;
+    --line-strong: #111111;
+    --accent: #5B665F;
+    --accent-strong: #445048;
+    --accent-soft: #EEF1EE;
   }
 
   * {
     box-sizing: border-box;
   }
 
+  html {
+    background: var(--bg);
+  }
+
   body {
     margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-    line-height: 1.7;
-    letter-spacing: 0.01em;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0;
+    text-rendering: optimizeLegibility;
   }
 
   main {
     display: block;
+  }
+
+  a {
+    color: var(--accent-strong);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.14em;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .site-shell {
@@ -41,31 +69,38 @@ const baseStyles = `
   }
 
   .container {
-    max-width: 860px;
+    max-width: 880px;
     margin: 0 auto;
   }
 
   .site-header {
-    padding: 4px 0 14px;
+    padding: 8px 0 18px;
   }
 
   .site-brand {
     margin: 0;
-    color: var(--ink-soft);
-    font-size: 13px;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
-    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
   }
 
   .site-footer {
-    padding: 14px 2px 4px;
-    font-size: 12px;
-    color: var(--ink-soft);
+    padding: 18px 0 8px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-muted);
   }
 
   @media (min-width: 768px) {
     .site-shell {
-      padding: 30px 24px;
+      padding: 28px 24px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-shell {
+      padding: 32px;
     }
   }
 `;

@@ -29,6 +29,11 @@ describe("GET /", () => {
 
     expect(res.status).toBe(200);
     expect(html).toContain("3分で必要な手続きを整理");
+    expect(html).toContain("--bg: #F5F5F2");
+    expect(html).toContain("--accent: #5B665F");
+    expect(html).toContain("&quot;Noto Sans JP&quot;, &quot;Hiragino Sans&quot;, &quot;Yu Gothic&quot;, sans-serif");
+    expect(html).not.toContain("--paper:");
+    expect(html).not.toContain("--signal:");
     expect(html).toContain("本サービスは一般的な制度情報に基づく案内です。");
     expect(html).toContain('href="/diagnosis"');
     expect(html).toContain("結果ページは次のステップで対応予定です。");
