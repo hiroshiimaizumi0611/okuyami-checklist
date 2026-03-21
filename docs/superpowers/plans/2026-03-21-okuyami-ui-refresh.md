@@ -21,6 +21,7 @@
 - No route URLs, diagnosis questions, result rules, or payment/download behavior change.
 - Existing analytics events remain unchanged unless a test proves a regression.
 - UI copy can be tightened, but required trust/legal meaning must remain visible per spec.
+- The domain presentation model may grow one optional deadline bucket for `期限の確認が必要なこと`, while continuing to hide empty sections and preserving diagnosis match behavior.
 - PDF continues to use the embedded `Noto Sans CJK JP subset` asset already in the repository.
 
 ## Planned File Structure
@@ -42,9 +43,14 @@
 
 ### Results and purchase states
 
+- Modify: `okuyami-checklist/src/domain/types.ts`
+- Modify: `okuyami-checklist/src/domain/diagnosis-engine.ts`
+- Modify: `okuyami-checklist/src/domain/result-snapshot.ts`
 - Modify: `okuyami-checklist/src/ui/components/result-summary.tsx`
 - Modify: `okuyami-checklist/src/server/routes/results.tsx`
 - Modify: `okuyami-checklist/src/server/routes/purchase-success.tsx`
+- Test: `okuyami-checklist/tests/domain/diagnosis-engine.test.ts`
+- Test: `okuyami-checklist/tests/domain/result-snapshot.test.ts`
 - Test: `okuyami-checklist/tests/routes/results.test.tsx`
 - Test: `okuyami-checklist/tests/routes/purchase-success.test.tsx`
 - Test: `okuyami-checklist/tests/e2e/diagnosis-purchase.spec.ts`
@@ -142,8 +148,10 @@ git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist commi
 - Modify: `okuyami-checklist/src/ui/components/diagnosis-form.tsx`
 - Modify: `okuyami-checklist/src/server/routes/landing.tsx`
 - Modify: `okuyami-checklist/src/server/routes/diagnosis.tsx`
+- Modify: `okuyami-checklist/src/server/routes/results.tsx`
 - Test: `okuyami-checklist/tests/routes/landing.test.tsx`
 - Test: `okuyami-checklist/tests/routes/diagnosis.test.tsx`
+- Test: `okuyami-checklist/tests/routes/results.test.tsx`
 
 - [ ] **Step 1: Make the landing and diagnosis tests demand the new hierarchy**
 
@@ -152,6 +160,7 @@ Update `tests/routes/landing.test.tsx` to assert:
 ```ts
 expect(html).toContain("何を先に確認すべきかを");
 expect(html).toContain("一般案内");
+expect(html).toContain("個別事情の法的判断");
 expect(html).not.toContain("結果ページは次のステップで対応予定です。");
 ```
 
@@ -160,6 +169,17 @@ Update `tests/routes/diagnosis.test.tsx` to assert:
 ```ts
 expect(html).toContain(`14問中`);
 expect(html).not.toContain("進捗表示: 全14問");
+expect(html).toContain('class="question-card"');
+expect(html).toContain("一般案内です。");
+expect(html).toContain("公式確認先");
+expect(html).toContain("専門家");
+```
+
+Update the invalid-submission route assertion in `tests/routes/results.test.tsx` so it requires the refreshed form shell when `POST /results` returns `400`:
+
+```ts
+expect(html).toContain("入力内容を確認してください");
+expect(html).toContain(`14問中`);
 expect(html).toContain('class="question-card"');
 expect(html).toContain("一般案内です。");
 ```
@@ -192,13 +212,14 @@ Implementation sketch:
 </section>
 ```
 
-- [ ] **Step 4: Rewrite `diagnosis-form.tsx` around the new question-card rhythm**
+- [ ] **Step 4: Rewrite `diagnosis-form.tsx` around the new question-card rhythm and cover invalid states**
 
 Implement:
 
 - text-based progress label instead of the `<progress>` meter
 - sharper card borders and quieter option rows
 - 16px input text and 13px helper/disclaimer text
+- explicit hover/focus/checked/invalid/disabled states that match the shared token system
 - one bottom trust note only
 
 Implementation sketch:
@@ -213,6 +234,8 @@ Implementation sketch:
 ```
 
 Keep form field names, method, and action unchanged.
+
+Also update `src/server/routes/results.tsx` only as needed so the invalid-submission branch reuses the refreshed diagnosis presentation instead of falling back to stale wrapper copy.
 
 - [ ] **Step 5: Re-run the focused route tests**
 
@@ -230,17 +253,25 @@ git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist commi
 ## Task 3: Rebuild the result summary hierarchy and paid CTA treatment
 
 **Files:**
+- Modify: `okuyami-checklist/src/domain/types.ts`
+- Modify: `okuyami-checklist/src/domain/diagnosis-engine.ts`
+- Modify: `okuyami-checklist/src/domain/result-snapshot.ts`
 - Modify: `okuyami-checklist/src/ui/components/result-summary.tsx`
 - Modify: `okuyami-checklist/src/server/routes/results.tsx`
+- Test: `okuyami-checklist/tests/domain/diagnosis-engine.test.ts`
+- Test: `okuyami-checklist/tests/domain/result-snapshot.test.ts`
 - Test: `okuyami-checklist/tests/routes/results.test.tsx`
 
-- [ ] **Step 1: Strengthen the results tests around canonical sections and CTA structure**
+- [ ] **Step 1: Strengthen the domain and results tests around canonical sections and CTA structure**
+
+Update `tests/domain/diagnosis-engine.test.ts` and `tests/domain/result-snapshot.test.ts` so the presentation model can carry an optional `needs-confirmation` bucket without breaking ordering or snapshot round-trips. Preserve the expectation that existing fixtures still expose `10か月以内に確認すること` and omit empty sections.
 
 Update `tests/routes/results.test.tsx` so it requires:
 
 ```ts
 expect(html).toContain("まず2週間以内に確認したいこと");
 expect(html).toContain("3か月以内に要注意のこと");
+expect(html).toContain("10か月以内に確認すること");
 expect(html).toContain("期限の確認が必要なこと");
 expect(html).toContain("一般的な案内です。");
 expect(html).toContain("公式確認先");
@@ -256,11 +287,23 @@ expect(html).toContain("公式窓口や専門家");
 
 - [ ] **Step 2: Run the results route tests to verify they fail**
 
-Run: `cd /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist/okuyami-checklist && npm run test -- tests/routes/results.test.tsx`
+Run: `cd /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist/okuyami-checklist && npm run test -- tests/domain/diagnosis-engine.test.ts tests/domain/result-snapshot.test.ts tests/routes/results.test.tsx`
 
-Expected: FAIL because the current result page still uses the older copy and hierarchy.
+Expected: FAIL because the current result page still uses the older copy and hierarchy, and the domain model does not yet support the extra presentation bucket.
 
-- [ ] **Step 3: Rework `result-summary.tsx` to match the canonical section design**
+- [ ] **Step 3: Extend the domain presentation model and snapshot parsing for canonical ordering**
+
+Update `src/domain/types.ts`, `src/domain/diagnosis-engine.ts`, and `src/domain/result-snapshot.ts` so UI/PDF rendering can represent the spec's canonical order:
+
+- `first-two-weeks`
+- `within-three-months`
+- `within-ten-months`
+- `needs-confirmation`
+- `expert-consultation`
+
+Map existing diagnosis results into `needs-confirmation` only where the procedure/presentation rules call for it, keep empty sections hidden, and preserve deterministic snapshot parsing/serialization.
+
+- [ ] **Step 4: Rework `result-summary.tsx` to match the canonical section design**
 
 Implement:
 
@@ -287,20 +330,20 @@ Implementation sketch:
 </section>
 ```
 
-- [ ] **Step 4: Keep the `POST /results` behavior stable while aligning the copy**
+- [ ] **Step 5: Keep the `POST /results` behavior stable while aligning the copy**
 
 Only adjust `src/server/routes/results.tsx` where copy or wrapper structure must support the refreshed component. Do not change parsing, validation, snapshot creation, or analytics behavior.
 
-- [ ] **Step 5: Re-run the results route tests**
+- [ ] **Step 6: Re-run the domain + results tests**
 
-Run: `cd /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist/okuyami-checklist && npm run test -- tests/routes/results.test.tsx`
+Run: `cd /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist/okuyami-checklist && npm run test -- tests/domain/diagnosis-engine.test.ts tests/domain/result-snapshot.test.ts tests/routes/results.test.tsx`
 
-Expected: PASS with the new section hierarchy and paid CTA assertions green.
+Expected: PASS with the new section hierarchy, optional bucket handling, and paid CTA assertions green.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist add okuyami-checklist/src/ui/components/result-summary.tsx okuyami-checklist/src/server/routes/results.tsx okuyami-checklist/tests/routes/results.test.tsx
+git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist add okuyami-checklist/src/domain/types.ts okuyami-checklist/src/domain/diagnosis-engine.ts okuyami-checklist/src/domain/result-snapshot.ts okuyami-checklist/src/ui/components/result-summary.tsx okuyami-checklist/src/server/routes/results.tsx okuyami-checklist/tests/domain/diagnosis-engine.test.ts okuyami-checklist/tests/domain/result-snapshot.test.ts okuyami-checklist/tests/routes/results.test.tsx
 git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist commit -m "refactor: rebuild results page hierarchy"
 ```
 
@@ -457,6 +500,7 @@ git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist commi
 
 **Files:**
 - Modify: `okuyami-checklist/tests/e2e/diagnosis-purchase.spec.ts`
+- Output: `okuyami-checklist/test-results/ui-refresh/`
 - Optional notes: `okuyami-checklist/README.md` only if local verification instructions changed materially
 
 - [ ] **Step 1: Tighten the E2E spec around visible hierarchy that matters**
@@ -512,7 +556,17 @@ Then manually verify:
 - purchase-success page: download action visually stronger than resend
 - generated PDF: A4 portrait feel, title block, trust copy, readable multi-page overflow
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Capture approval artifacts for before/after review**
+
+Create `okuyami-checklist/test-results/ui-refresh/` and save:
+
+- landing/results/purchase-success screenshots
+- one generated PDF artifact or export
+- a short text note naming the verified local URL and date
+
+These artifacts are for review only and should stay untracked unless the user explicitly asks to keep them.
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git -C /Users/hiroshiimaizumi/Documents/.worktrees/codex/okuyami-checklist add okuyami-checklist/tests/e2e/diagnosis-purchase.spec.ts
