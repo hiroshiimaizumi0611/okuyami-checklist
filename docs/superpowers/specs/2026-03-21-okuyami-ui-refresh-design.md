@@ -470,7 +470,8 @@ card-level treatment:
 - 押下可能領域は 44px 以上を意識する
 - hover に依存しない
 - 状態差分は色だけでなく、線や文言でも示す
-- helper / label / disclaimer は 13px 以上を維持する
+- helper / disclaimer は 13px 以上を維持する
+- meta / badge / section label は 11px を下限とし、短文に限定する
 - link は色だけでなく下線でも判別可能にする
 - invalid state では入力位置の近くにエラー文を出せるようにする
 - focus ring は 2px 以上で、background と明確に分離する
