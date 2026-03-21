@@ -54,7 +54,8 @@ describe("GET /purchase/success", () => {
     const pendingHtml = await pendingRes.text();
 
     expect(pendingRes.status).toBe(200);
-    expect(pendingHtml).toContain("決済の反映を確認中");
+    expect(pendingHtml).toContain("確認中");
+    expect(pendingHtml).not.toContain("ダウンロードリンクを再送する");
     expect(pendingHtml).not.toContain("download?token=");
 
     await purchaseRepository.markPaid({
@@ -83,9 +84,43 @@ describe("GET /purchase/success", () => {
 
     expect(paidRes.status).toBe(200);
     expect(paidHtml).toContain("有料版のダウンロード");
+    expect(paidHtml).toContain("購入時のメールアドレス");
     expect(token).toBeDefined();
 
     const verified = await verifyDownloadToken(token ?? "", DOWNLOAD_TOKEN_SECRET);
     expect(verified.purchase_id).toBe(purchaseId);
+  });
+
+  it("shows the dedicated test-checkout state in PAYMENT_MODE=test", async () => {
+    const snapshot = createResultSnapshot(
+      runDiagnosis(basicCase),
+      new Date("2026-03-20T00:00:00.000Z")
+    );
+    const purchaseId = await purchaseRepository.createPending({
+      email: "buyer@example.com",
+      snapshotJson: JSON.stringify(snapshot),
+      stripeSessionId: "cs_test_waiting_checkout"
+    });
+
+    const res = await app.request(
+      `/purchase/success?purchaseId=${purchaseId}&testSessionId=cs_test_waiting_checkout`,
+      undefined,
+      {
+        DB: db,
+        APP_URL: "http://localhost:8787",
+        SNAPSHOT_TOKEN_SECRET,
+        DOWNLOAD_TOKEN_SECRET,
+        STRIPE_SECRET_KEY: "sk_test_success",
+        STRIPE_WEBHOOK_SECRET: "whsec_success",
+        RESEND_API_KEY: "resend_success",
+        PAYMENT_MODE: "test"
+      }
+    );
+
+    const html = await res.text();
+
+    expect(res.status).toBe(200);
+    expect(html).toContain("TEST MODE");
+    expect(html).toContain("テスト決済を完了する");
   });
 });
