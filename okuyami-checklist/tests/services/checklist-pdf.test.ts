@@ -1,4 +1,4 @@
-import { PDFPage } from "pdf-lib";
+import { PDFDocument, PDFPage } from "pdf-lib";
 import { describe, expect, it, vi } from "vitest";
 import type { ResultSnapshot } from "../../src/domain/result-snapshot";
 import {
@@ -59,6 +59,7 @@ describe("checklist PDF", () => {
     expect(model).toMatchObject({
       title: "おくやみ手続きナビ 有料版チェックリスト",
       generatedAtLabel: "作成日: 2026-03-20",
+      trustNotice: "一般案内です。実際に進める前に公式情報を確認してください。",
       sections: [
         {
           title: "まず2週間以内に確認したい手続き",
@@ -101,10 +102,11 @@ describe("checklist PDF", () => {
     const drawnStrings = drawTextSpy.mock.calls.map(([text]) => text);
 
     expect(drawnStrings).toContain("おくやみ手続きナビ 有料版チェックリスト");
+    expect(drawnStrings).toContain("CHECKLIST");
     expect(drawnStrings).toContain("まず2週間以内に確認したい手続き");
-    expect(drawnStrings).toContain("Procedure");
+    expect(drawnStrings).toContain("一般案内");
+    expect(drawnStrings).toContain("公式情報");
     expect(drawnStrings).toContain("死亡届の提出");
-    expect(drawnStrings).toContain("Reason");
     expect(drawnStrings).toContain("死亡後7日以内の届出が必要です。");
 
     drawTextSpy.mockRestore();
@@ -140,5 +142,37 @@ describe("checklist PDF", () => {
     expect(drawTextSpy.mock.calls.map(([text]) => text)).not.toContain(longReason);
 
     drawTextSpy.mockRestore();
+  });
+
+  it("creates more than one page when many procedures are rendered", async () => {
+    const overflowSnapshot: ResultSnapshot = {
+      ...sampleSnapshot,
+      procedures: Array.from({ length: 18 }, (_, index) => ({
+        ...sampleSnapshot.procedures[0],
+        id: `proc_${index}`,
+        name: `確認項目 ${index + 1}`,
+        display_reason: `確認理由 ${index + 1} を詳細に整理します。`,
+        required_items_hint: "死亡診断書、戸籍、窓口で求められる確認書類一式を準備"
+      })),
+      sections: [
+        {
+          slug: "first-two-weeks",
+          title: "まず2週間以内に確認したい手続き",
+          procedures: Array.from({ length: 18 }, (_, index) => ({
+            ...sampleSnapshot.sections[0].procedures[0],
+            id: `proc_${index}`,
+            name: `確認項目 ${index + 1}`,
+            display_reason: `確認理由 ${index + 1} を詳細に整理します。`,
+            required_items_hint: "死亡診断書、戸籍、窓口で求められる確認書類一式を準備"
+          }))
+        }
+      ]
+    };
+
+    const model = buildChecklistPdfModel(overflowSnapshot);
+    const pdf = await buildChecklistPdf(model);
+    const pdfDoc = await PDFDocument.load(pdf);
+
+    expect(pdfDoc.getPageCount()).toBeGreaterThan(1);
   });
 });
