@@ -44,11 +44,13 @@ describe("POST /results", () => {
     const events = await createD1EventRepository(db).listRecent();
 
     expect(res.status).toBe(200);
-    expect(html).toContain("まず 1〜2 週間で確認したいこと");
-    expect(html).toContain("3 か月以内に要注意のこと");
-    expect(html).toContain("10 か月以内に確認すること");
-    expect(html).toContain("表示理由");
+    expect(html).toContain("まず2週間以内に確認したいこと");
+    expect(html).toContain("3か月以内に要注意のこと");
+    expect(html).toContain("10か月以内に確認すること");
+    expect(html).toContain("期限の確認が必要なこと");
+    expect(html).toContain("一般的な案内です。");
     expect(html).toContain("公式確認先");
+    expect(html).toContain("有料版 PDF を受け取る");
     expect(html).toContain('name="snapshot_token"');
     expect(events[0]?.eventName).toBe("diagnosis_completed");
     expect(events[0]?.payload).toMatchObject({
@@ -131,7 +133,7 @@ describe("POST /results", () => {
 
     expect(res.status).toBe(200);
     expect(html).toContain("専門家相談を検討");
-    expect(html).toContain("法的期限");
+    expect(html).toContain("公式窓口や専門家");
   });
 });
 

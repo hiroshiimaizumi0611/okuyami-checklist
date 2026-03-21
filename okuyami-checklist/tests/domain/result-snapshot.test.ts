@@ -16,6 +16,7 @@ describe("result snapshot", () => {
     );
     expect(Array.isArray(snapshot.sections[0]?.procedures)).toBe(true);
     expect(snapshot.sections[0]?.procedures[0]?.id).toBe(result.sections[0]?.procedures[0]?.id);
+    expect(snapshot.sections.map((section) => section.slug)).toContain("needs-confirmation");
 
     const roundTrip = parseResultSnapshot(JSON.parse(JSON.stringify(snapshot)));
     expect(roundTrip).toEqual(snapshot);

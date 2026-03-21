@@ -19,7 +19,8 @@ describe("runDiagnosis", () => {
     expect(result.sections.map((section) => section.slug)).toEqual([
       "first-two-weeks",
       "within-three-months",
-      "within-ten-months"
+      "within-ten-months",
+      "needs-confirmation"
     ]);
 
     expect(result.sections[0].procedures.map((item) => item.id)).toEqual([
@@ -35,6 +36,9 @@ describe("runDiagnosis", () => {
     );
     expect(healthInsuranceProcedure?.display_reason).toBe(
       "健康保険種別に応じて資格喪失確認が必要です。"
+    );
+    expect(result.sections.find((section) => section.slug === "needs-confirmation")?.title).toBe(
+      "期限の確認が必要なこと"
     );
   });
 

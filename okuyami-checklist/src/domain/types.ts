@@ -20,6 +20,8 @@ export type DeadlineBucket =
   | "within-ten-months"
   | "expert-consultation";
 
+export type ResultSectionSlug = DeadlineBucket | "needs-confirmation";
+
 export interface ProcedureDefinition {
   id: string;
   name: string;
@@ -69,7 +71,7 @@ export interface DiagnosisProcedure extends ProcedureDefinition {
 }
 
 export interface DiagnosisSection {
-  slug: DeadlineBucket;
+  slug: ResultSectionSlug;
   title: string;
   procedures: DiagnosisProcedure[];
 }

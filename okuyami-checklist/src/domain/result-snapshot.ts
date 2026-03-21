@@ -1,4 +1,4 @@
-import type { DeadlineBucket, DiagnosisResult } from "./types";
+import type { DeadlineBucket, DiagnosisResult, ResultSectionSlug } from "./types";
 
 export interface ResultSnapshotProcedure {
   id: string;
@@ -17,7 +17,7 @@ export interface ResultSnapshotProcedure {
 }
 
 export interface ResultSnapshotSection {
-  slug: DeadlineBucket;
+  slug: ResultSectionSlug;
   title: string;
   procedures: ResultSnapshotProcedure[];
 }
@@ -117,7 +117,7 @@ function ensureSectionList(value: unknown, path: string): ResultSnapshotSection[
   return value.map((row, index) => {
     const node = ensureObject(row, `${path}[${index}]`);
     return {
-      slug: ensureDeadlineBucket(node.slug, `${path}[${index}].slug`),
+      slug: ensureSectionSlug(node.slug, `${path}[${index}].slug`),
       title: ensureString(node.title, `${path}[${index}].title`),
       procedures: ensureProcedureList(node.procedures, `${path}[${index}].procedures`)
     };
@@ -176,6 +176,21 @@ function ensureDeadlineBucket(value: unknown, path: string): DeadlineBucket {
   }
 
   return deadlineBucket;
+}
+
+function ensureSectionSlug(value: unknown, path: string): ResultSectionSlug {
+  const sectionSlug = ensureString(value, path);
+  if (
+    sectionSlug !== "first-two-weeks" &&
+    sectionSlug !== "within-three-months" &&
+    sectionSlug !== "within-ten-months" &&
+    sectionSlug !== "needs-confirmation" &&
+    sectionSlug !== "expert-consultation"
+  ) {
+    throw new Error(`${path} has an unsupported value`);
+  }
+
+  return sectionSlug;
 }
 
 function toSnapshotProcedure(

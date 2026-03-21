@@ -4,7 +4,8 @@ import type {
   DiagnosisAnswers,
   DiagnosisProcedure,
   DiagnosisResult,
-  MatchedRule
+  MatchedRule,
+  ResultSectionSlug
 } from "./types";
 
 const DEADLINE_ORDER: DeadlineBucket[] = [
@@ -14,11 +15,20 @@ const DEADLINE_ORDER: DeadlineBucket[] = [
   "expert-consultation"
 ];
 
-const SECTION_TITLES: Record<DeadlineBucket, string> = {
-  "first-two-weeks": "まず 1〜2 週間で確認したいこと",
-  "within-three-months": "3 か月以内に要注意のこと",
-  "within-ten-months": "10 か月以内に確認すること",
-  "expert-consultation": "複雑なので専門家相談を検討したいこと"
+const SECTION_ORDER: ResultSectionSlug[] = [
+  "first-two-weeks",
+  "within-three-months",
+  "within-ten-months",
+  "needs-confirmation",
+  "expert-consultation"
+];
+
+const SECTION_TITLES: Record<ResultSectionSlug, string> = {
+  "first-two-weeks": "まず2週間以内に確認したいこと",
+  "within-three-months": "3か月以内に要注意のこと",
+  "within-ten-months": "10か月以内に確認すること",
+  "needs-confirmation": "期限の確認が必要なこと",
+  "expert-consultation": "専門家相談を検討したいこと"
 };
 
 export function runDiagnosis(input: DiagnosisAnswers): DiagnosisResult {
@@ -73,9 +83,9 @@ export function runDiagnosis(input: DiagnosisAnswers): DiagnosisResult {
 }
 
 function buildSections(procedures: DiagnosisProcedure[]) {
-  return DEADLINE_ORDER.map((slug) => {
-    const sectionProcedures = procedures.filter(
-      (procedure) => procedure.deadline_bucket === slug
+  return SECTION_ORDER.map((slug) => {
+    const sectionProcedures = procedures.filter((procedure) =>
+      belongsToSection(procedure, slug)
     );
 
     return {
@@ -84,6 +94,32 @@ function buildSections(procedures: DiagnosisProcedure[]) {
       procedures: sectionProcedures
     };
   }).filter((section) => section.procedures.length > 0);
+}
+
+function belongsToSection(
+  procedure: DiagnosisProcedure,
+  slug: ResultSectionSlug
+): boolean {
+  if (slug === "needs-confirmation") {
+    return needsDeadlineConfirmation(procedure);
+  }
+
+  return procedure.deadline_bucket === slug;
+}
+
+function needsDeadlineConfirmation(procedure: DiagnosisProcedure): boolean {
+  if (procedure.requires_expert_flag) {
+    return false;
+  }
+
+  const detail = `${procedure.short_description} ${procedure.caution_text} ${procedure.display_reason}`;
+
+  return (
+    detail.includes("期限") ||
+    detail.includes("提出先") ||
+    detail.includes("自治体") ||
+    procedure.national_or_local_flag !== "national-common"
+  );
 }
 
 function collectEscalations(
